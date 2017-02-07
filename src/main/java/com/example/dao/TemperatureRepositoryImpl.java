@@ -1,26 +1,29 @@
 package com.example.dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.model.Temperature;
-
 @Repository
- class TemperatureRepositoryImpl implements TemperatureRepository{
+class TemperatureRepositoryImpl implements TemperatureRepository{
 	
-	List<Temperature> temperatures = new ArrayList<>();
+	List<Double> temperatures = Collections.synchronizedList(new ArrayList<>());
 
 	@Override
-	public void add(Temperature temperature) {
+	public void add(Double temperature) {
 		temperatures.add(temperature);
-		
 	}
 
 	@Override
-	public List<Temperature> getAll() {
+	public List<Double> getAll() {
 		return temperatures;
+	}
+
+	@Override
+	public void clear() {
+		temperatures = Collections.synchronizedList(new ArrayList<>());
 	}
 
 }

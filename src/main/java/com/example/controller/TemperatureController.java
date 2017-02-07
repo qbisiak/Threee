@@ -1,9 +1,12 @@
 package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.model.Temperature;
@@ -22,14 +25,15 @@ public class TemperatureController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateTemperature(@RequestBody Temperature temp) {
+	@ResponseStatus(value = HttpStatus.OK)
+	public void updateTemperature(@RequestBody Temperature temp) {
 		temperatureService.updateTemperature(temp.getValue());
-		return "Value updated: " + temp.getValue();
 	}
 
 	@RequestMapping(value = "/stats", method = RequestMethod.GET)
-	public TemperatureSummary getStats() {
-		return temperatureService.getStats();
+	public ResponseEntity<TemperatureSummary> getStats() {
+		TemperatureSummary summary = temperatureService.getStats();
+		return new ResponseEntity<TemperatureSummary>(summary, HttpStatus.CREATED);
 	}
 
 }
